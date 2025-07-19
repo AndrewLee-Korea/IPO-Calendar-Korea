@@ -1,73 +1,73 @@
 
-# 📘 중복청약 IPO 캘린더 수집기 (ver2)
+# 📘 Duplicate Subscription IPO Calendar Scraper
 
-이 프로젝트는 **`ipostock.co.kr`의 공모주 청약 정보를 스크래핑**하여 종목별 **청약 일정과 주간사 정보를 자동 수집**하는 파이썬 도구입니다.  
-청약 캘린더를 주기적으로 수집해 엑셀로 저장하는 자동화 목적으로 개발되었습니다.
+This project is a Python tool that **scrapes IPO subscription information from `ipostock.co.kr`**, automatically collecting **subscription schedules and underwriter details** for each stock.  
+It is designed to automate the process of regularly extracting the IPO calendar and saving the results to Excel.
 
 ---
 
-## 📌 버전 히스토리
+## 📌 Version History
 
 - **ver1 (2021)**  
-  - 38커뮤니케이션에서 표 형식 청약 정보를 크롤링
+  - Crawled IPO tables from 38 Communication's IPO calendar
 
 - **ver2 (2022-12-14)**  
-  - `ipostock.co.kr`로 대상 사이트 변경  
-  - 각 종목의 상세 페이지를 직접 방문하여 주간사 테이블 파싱
+  - Changed the source to `ipostock.co.kr`  
+  - Now visits each IPO’s detail page to extract underwriter information from a table
 
 ---
 
-## 🛠️ 기능 요약
+## 🛠️ Feature Overview
 
-### 1. 사용자가 조회 기간을 직접 입력
-- 시작일, 종료일을 `YYYY-MM-DD` 형식으로 CLI에서 입력
-- 입력된 기간을 기준으로 데이터 수집 시작
+### 1. User-Defined Date Range Input
+- Users input the start and end dates in `YYYY-MM-DD` format via CLI
+- The specified date range is used to fetch relevant data
 
-### 2. 공모주 청약 목록 수집
-- `ipostock.co.kr`의 청약 캘린더에서 페이지를 순회하며 종목 상세 링크 수집
-- HTML `<a>` 태그에서 특정 `href` 패턴을 찾아 필터링
+### 2. Collect IPO Subscription Links
+- Iterates through pages on the IPO calendar at `ipostock.co.kr`
+- Extracts links to individual IPO detail pages by filtering specific `<a>` tag `href` patterns
 
-### 3. 종목별 상세 정보 스크래핑
-- 종목별 상세 페이지 접속
-- 종목명, 시장, 청약 시작/종료일, 주간사 리스트 등을 테이블에서 파싱
+### 3. Scrape Details Per IPO
+- Visits each IPO’s detail page
+- Parses tables to extract: stock name, market, subscription start/end dates, and lead underwriters
 
-### 4. 결과 저장
-- 수집된 정보를 `pandas.DataFrame`으로 정리
-- 필요 시 엑셀(`.xlsx`) 또는 CSV로 저장 가능
+### 4. Save Results
+- Compiles data into a `pandas.DataFrame`
+- Optionally saves the result to Excel (`.xlsx`) or CSV format
 
 ---
 
-## 💡 사용 예시
+## 💡 Usage Example
 
 ```bash
-검색 시작일자를 입력해주세요. (YYYY-MM-DD) >>
+Please enter the start date (YYYY-MM-DD) >>
 2023-01-01
-검색 종료일자를 입력해주세요. (YYYY-MM-DD) >>
+Please enter the end date (YYYY-MM-DD) >>
 2023-12-31
 ```
 
 ---
 
-## 🔗 주요 라이브러리
+## 🔗 Key Libraries Used
 
-- `requests`, `BeautifulSoup` — 웹 크롤링
-- `pandas` — 데이터프레임 처리
-- `datetime`, `dateutil` — 기간 계산
-- `time` — 크롤링 간 sleep 처리
-
----
-
-## 📂 결과 예시
-
-| 종목명 | 시장 | 청약시작일자 | 청약종료일자 | 주간사 |
-|--------|------|--------------|--------------|--------|
-| ABC전자 | 코스닥 | 2023-01-10 | 2023-01-11 | NH투자증권 |
-| XYZ바이오 | 코스피 | 2023-01-12 | 2023-01-13 | 미래에셋증권 |
+- `requests`, `BeautifulSoup` — for web scraping
+- `pandas` — for data handling
+- `datetime`, `dateutil` — for date calculations
+- `time` — for throttling requests between pages
 
 ---
 
-## 🧑‍💻 개발자 참고사항
+## 📂 Sample Output
 
-- 수집 주기를 자동화하려면 `crontab` 또는 Task Scheduler 연동 가능
-- 웹 구조 변경 시 파싱 로직 수정 필요
-- 추후 다중 사이트 크롤링 기능 확장 가능
+| Stock Name | Market | Subscription Start | Subscription End | Underwriter(s)     |
+|------------|--------|--------------------|------------------|---------------------|
+| ABC Corp   | KOSDAQ | 2023-01-10         | 2023-01-11       | NH Investment & Securities |
+| XYZ Bio    | KOSPI  | 2023-01-12         | 2023-01-13       | Mirae Asset Securities     |
+
+---
+
+## 🧑‍💻 Notes for Developers
+
+- You can automate regular data collection using `crontab` or Task Scheduler
+- If the website's HTML structure changes, parsing logic must be updated
+- This tool can be extended to support multiple source websites in the future
